@@ -12,8 +12,7 @@ epost_response = Net::HTTP.post_form(epost_url, epost_query)
 epost_doc = Nokogiri::XML(epost_response.body)
 query_key = epost_doc.css('QueryKey').text
 webenv= epost_doc.css('WebEnv').text
-p 'Got a query_keya and WebEnv'
-p query_key, webenv
+puts "Got a query_key (#{query_key}) and WebEnv (#{webenv})"
 
 ids.each_slice(chunks) do |s|
   start = ids.min-s.min

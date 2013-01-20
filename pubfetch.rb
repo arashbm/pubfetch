@@ -13,7 +13,7 @@ end
 start = ARGV[0].to_i
 finish = ARGV[1].to_i
 ids = start...finish
-chunks = 1000
+chunks = 500
 
 puts "Trying to register a query for ids within range '#{ids.to_s}'"
 
@@ -32,6 +32,10 @@ ids.each_slice(chunks) do |s|
   puts "="*80
   puts "Downloading a chunk of #{chunks} articles from #{s.min} to #{s.max}..."
 
-  system "wget --output-document pub-#{s.min}-#{s.max}.xml 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&query_key=#{query_key}&WebEnv=#{webenv}&retmax=#{chunks}&retstart=#{start}&retmode=xml'"
+  targetfile = "pub-#{s.min}-#{s.max}.xml"
+  begin
+    system "wget --output-document #{targetfile} 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&query_key=#{query_key}&WebEnv=#{webenv}&retmax=#{chunks}&retstart=#{start}&retmode=xml'"
+    doc = Nokogiri.XML(File.open targetfile)
+  end while doc.errors.size > 0
   sleep 20
 end

@@ -2,7 +2,7 @@
 require 'nokogiri'
 require 'net/http'
 require 'open-uri'
-if ARGV.length < 2
+if ARGV.length != 2
   puts 'Usage: pubfetch [start] [finish]
 
 Downloads articles from PubMed in chunks of 1000 as XML. From id [start] to [finish]'

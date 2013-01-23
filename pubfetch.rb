@@ -36,6 +36,7 @@ ids.each_slice(chunks) do |s|
   begin
     system "wget --output-document #{targetfile} 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&query_key=#{query_key}&WebEnv=#{webenv}&retmax=#{chunks}&retstart=#{start}&retmode=xml'"
     doc = Nokogiri.XML(File.open targetfile)
-  end while doc.errors.size > 0
+    sleep 5
+  end while doc.errors.size > 0 || doc.css('PubmedArticle').size < 1
   sleep 20
 end

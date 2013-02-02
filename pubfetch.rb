@@ -27,14 +27,14 @@ webenv= epost_doc.css('WebEnv').text
 puts "Got a query_key (#{query_key}) and WebEnv (#{webenv})"
 
 ids.each_slice(chunks) do |s|
-  start = ids.min-s.min
+  start = s.min-ids.min
 
   puts "="*80
   puts "Downloading a chunk of #{chunks} articles from #{s.min} to #{s.max}..."
 
   targetfile = "pub-#{s.min}-#{s.max}.xml"
   begin
-    system "wget --no-verbose --output-document #{targetfile} 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&query_key=#{query_key}&WebEnv=#{webenv}&retmax=#{chunks}&retstart=#{start}&retmode=xml'"
+    system "wget --output-document #{targetfile} 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&query_key=#{query_key}&WebEnv=#{webenv}&retmax=#{chunks}&retstart=#{start}&retmode=xml'"
     doc = Nokogiri.XML(File.open targetfile)
     sleep 5
   end while doc.errors.size > 0 || doc.css('PubmedArticle').size < 1

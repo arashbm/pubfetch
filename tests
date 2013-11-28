@@ -1,0 +1,2 @@
+echo "failing test"; exit 65
+echo "not failing test"; exit 0
